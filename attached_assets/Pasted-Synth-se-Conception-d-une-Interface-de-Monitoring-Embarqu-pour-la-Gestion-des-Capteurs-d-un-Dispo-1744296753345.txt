@@ -1,0 +1,86 @@
+Synthèse : Conception d’une Interface de Monitoring Embarqué pour la Gestion des Capteurs d’un Dispositif Médical pour Patients Atteints de Maladie Rénale Chronique
+
+1. Contexte et Objectifs
+
+Dans un hôpital, un dispositif médical embarqué est installé sur des matelas pour surveiller les signes vitaux des patients atteints de maladie rénale chronique. Ce dispositif est équipé de capteurs intelligents qui collectent des données physiologiques (pression, température, mouvements, etc.).
+
+L’hôpital dispose déjà d’une application pour les médecins, dédiée à l’analyse des données et au diagnostic. Le but de cette interface de monitoring embarqué est donc uniquement la gestion des capteurs et non l’analyse médicale des données.
+
+L’interface doit permettre :
+
+Une surveillance en temps réel du fonctionnement des capteurs.
+
+La gestion de leur état, maintenance et configuration.
+
+Une communication fluide avec l’infrastructure réseau et les systèmes centraux.
+
+Un niveau de sécurité élevé conforme aux normes médicales.
+
+
+
+---
+
+2. Fonctionnalités Essentielles
+
+2.1. Gestion des Capteurs
+
+Identification et état des capteurs : nom, type, numéro de série, fabricant, version du firmware, date d’installation.
+
+Statut en temps réel : actif/inactif, connecté/déconnecté, niveau de batterie, intégrité du signal.
+
+Diagnostic automatique : détection de pannes, incohérences de mesures, suggestions de corrections.
+
+Historique des événements : allumage/extinction, perte de connexion, erreurs détectées.
+
+Mise à jour du firmware des capteurs avec rollback en cas d’échec.
+
+
+2.2. Surveillance et Maintenance
+
+Visualisation des données brutes des capteurs sans interprétation médicale.
+
+Alertes et notifications en cas de dysfonctionnement (capteur en panne, batterie faible, données hors seuil).
+
+Mode test et calibration pour garantir des mesures fiables.
+
+Logs et journal des opérations enregistrant toutes les interventions techniques.
+
+
+2.3. Configuration et Contrôle
+
+Paramétrage des capteurs (fréquence d’échantillonnage, plage de mesure, seuils de sécurité).
+
+Activation/Désactivation des capteurs et mode économie d’énergie.
+
+Redémarrage à distance en cas de problème.
+
+Réassignation des capteurs à différents patients ou dispositifs.
+
+
+2.4. Connectivité et Intégration
+
+Support des protocoles de communication : Wi-Fi, Bluetooth, LoRa, Zigbee, Ethernet.
+
+Synchronisation avec un serveur central avec mise en cache en cas de perte de connexion.
+
+Gestion des droits d’accès (lecture seule, configuration, maintenance).
+
+Support multi-utilisateurs et journal des activités.
+
+
+2.5. Sécurité et Conformité
+
+Chiffrement des communications (SSL/TLS, chiffrement des données stockées).
+
+Authentification des utilisateurs avec vérification en deux étapes pour les actions critiques.
+
+Sauvegarde et récupération des configurations des capteurs.
+
+Respect des normes médicales (ISO, CE, FDA).
+
+
+2.6. Fonctionnalités Avancées (optionnelles)
+
+Intelligence Artificielle pour prédire les pannes.
+
+Mode hors ligne permettant un stockage temporaire des données.

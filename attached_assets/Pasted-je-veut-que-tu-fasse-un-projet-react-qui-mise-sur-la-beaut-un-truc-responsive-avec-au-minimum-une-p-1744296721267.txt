@@ -1,0 +1,14 @@
+je veut que tu fasse un projet react qui mise sur la beauté un truc responsive avec au minimum une page dashboard une page pour voir les dispositifs qui sont dans notre cas les matelas et a laquel on peut avoir les donnés gobaes de capteurs du atelas et le connecter ou non au topic qui le concerne le topic que je vais envoyer ci dessous eras celui sur lequelle je vais envoyer les inforations au moment d tester l'appli donc c'est avec lui je vais tester je veut un truc beau je me repete peut etre mais je veut un truc pro responsive et tout utilise les truc comme bootstrap si tu veut mm ou autre je veut des graphes et des tableaux pour les statistiques générales sur le dashboard d'acceuil et également graphes et tableau pour avoir les donnés visualisé par manetlas ou par capteur tu est inteligent réfléchis et faitr les recherches pour savoir comment disposer le truc je veut une base de donné InfluxDB qui seras directe dans le projet et qui vas permettre de stoquer et de visualiser les donné InfluxDB et  pas une autre base de donné donc je  veut un trucq qui vas avoir les fonctionalités suivantes ais plus principalement vas capter les donnés envoyé par le broquer MQT
+
+broker.hivemq.com
+sur le topique
+
+patient/esp32-c40a24/data
+
+il y auras les matelas et l'orsque on connecte un matelas au broquer il ecoute sur le topique que on entre manuelement et qui par defaut est celui que je t'ai donné c'est un projet electron js je veut avec une base de donné Indluxdb
+avec cette base de donné les donné recu en formas json par via le broquer sont stoqué et afcichés en temps réelle sur l'interface mon broquer est deja configuré et envoie les informations je veut pas que tu simule un queconque comportement de l'interface je veut que tout sois fonctionnelle comunicaion entre le back end et la bd tout dans le mm projet comme si j'avais eberger le programme sur mon ordi pour la suite n'oublie pas les graphes et tabeau de visualisation pour visualiser les donnés anterieurs et qui se mettent a jours en temps réelle en mm tempsque le broquer envoe ses donnés sur le topic tu auras donc compris que pour le moment le matelas auras juste les capteurs dont on enveras les donnés via MQTT a savoir
+
+{"temperature":24,"pulse":40,"creatinine":0}
+ceci est un exemple de ce qui est envoyé via MQTT il y auras la posibilité de mettre un seil d'alerte et de faire a ce donné tout ce qui se font a de tels donné dans le cadre d'une interface de ce genre je veut un truc fonctionnel si tu as besoin de quelque chose demande moi jene veut pas de fonctionnalité simulé ou de graphe ou autre qui sont simulé ou dont le fonctionnement ne proviens pas des donnés recus via la base de donné
+vise une interface la plus belle possible et professionnel ainsi que fonctionnel ne t'éloigne pas de ce que je dzmande  avec une page de loggin et de sign in qui auronts aussi des sauvegarde dans la base de donné que on utilise t'as besoin d'éclaircissement ?
+
