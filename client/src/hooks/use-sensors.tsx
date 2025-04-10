@@ -99,9 +99,8 @@ export function useSensors(deviceId: string | number) {
         deviceId: deviceIdStr
       });
     });
-      
-      setLatestData(prev => ({
-        ...prev,
+    
+    return () => unsubscribe();
         temperature,
         pulse,
         creatinine,
