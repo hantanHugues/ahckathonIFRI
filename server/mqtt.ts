@@ -14,9 +14,6 @@ const mqttOptions = {
   clean: true,
   connectTimeout: 4000,
   reconnectPeriod: 1000,
-  clean: true,
-  connectTimeout: 4000,
-  reconnectPeriod: 1000,
 };
 
 // Fonction pour générer des données simulées
