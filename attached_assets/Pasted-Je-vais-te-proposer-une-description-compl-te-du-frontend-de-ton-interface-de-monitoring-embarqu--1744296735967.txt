@@ -1,0 +1,138 @@
+Je vais te proposer une **description complète du frontend** de ton interface de monitoring embarqué, avec une **représentation des maquettes** pour chaque page et leurs **fonctionnalités détaillées**.  
+
+---
+
+# 🏥 **Interface de Monitoring des Matelas Médicaux**  
+
+## 🌐 **Technologies Frontend Recommandées**  
+- **Framework Frontend** : React.js ou Vue.js  
+- **UI Library** : Tailwind CSS / Material UI / Bootstrap  
+- **Graphiques & Data Viz** : Chart.js ou Recharts  
+- **Gestion d’état** : Redux / Vuex (si nécessaire)  
+- **Communication avec le backend** : Axios (API REST)  
+
+---
+
+## 📌 **Pages et Fonctionnalités**  
+
+### 1️⃣ **🔐 Page de Connexion (Login)**
+📌 **Objectif :** Permettre aux techniciens et administrateurs d’accéder à l’interface de monitoring.  
+
+🛠 **Fonctionnalités :**  
+✅ Authentification via API REST (email + mot de passe)  
+✅ Affichage des erreurs en cas d’identifiants incorrects  
+✅ Option « Mot de passe oublié »  
+✅ Redirection vers la page principale après connexion  
+
+📌 **Maquette :**  
+- **Champ Email** 📧  
+- **Champ Mot de passe** 🔒  
+- **Bouton Connexion** ▶️  
+- **Lien "Mot de passe oublié ?"** 🔄  
+
+---
+
+### 2️⃣ **🏠 Tableau de Bord (Dashboard)**
+📌 **Objectif :** Vue d’ensemble de l’état des matelas et capteurs.  
+
+🛠 **Fonctionnalités :**  
+✅ Liste des matelas avec état en temps réel  
+✅ Vue rapide des alertes (capteurs en panne, batterie faible, etc.)  
+✅ Nombre de capteurs actifs/inactifs  
+✅ Accès rapide à un matelas pour voir les détails  
+
+📌 **Maquette :**  
+- **Carte de chaque matelas avec statut** 🛏️  
+- **Graphique des capteurs actifs/inactifs** 📊  
+- **Liste des alertes importantes** ⚠️  
+
+---
+
+### 3️⃣ **🛏️ Page Détails d’un Matelas**
+📌 **Objectif :** Afficher les informations d’un matelas spécifique et ses capteurs.  
+
+🛠 **Fonctionnalités :**  
+✅ Infos générales : numéro de série, état, patient associé  
+✅ Liste des capteurs installés sur ce matelas  
+✅ État de chaque capteur (connecté/déconnecté, batterie, signal)  
+✅ Historique des événements liés à ce matelas  
+✅ Actions possibles : rebooter un capteur, recalibrer, mettre à jour  
+
+📌 **Maquette :**  
+- **Nom du matelas + statut** 🛏️  
+- **Patient associé (référence depuis API hospitalière)** 👤  
+- **Liste des capteurs avec état en couleur** (✅ OK / ❌ Erreur)  
+- **Bouton "Voir les données brutes"** 📈  
+- **Bouton "Mettre à jour Firmware"** 🔄  
+- **Bouton "Redémarrer le capteur"** 🔁  
+
+---
+
+### 4️⃣ **📊 Page Données des Capteurs**
+📌 **Objectif :** Visualisation des mesures collectées sur un matelas en temps réel.  
+
+🛠 **Fonctionnalités :**  
+✅ Affichage sous forme de graphiques des dernières valeurs mesurées  
+✅ Sélection de la période d’affichage (dernière heure, 24h, 7 jours)  
+✅ Alertes affichées si des valeurs sont hors seuil  
+✅ Possibilité d’exporter les données (CSV, JSON)  
+
+📌 **Maquette :**  
+- **Graphique en temps réel des mesures** 📈  
+- **Filtres pour choisir la période** ⏳  
+- **Liste des alertes associées aux capteurs** ⚠️  
+- **Bouton "Exporter les données"** 📥  
+
+---
+
+### 5️⃣ **⚠️ Page Alertes et Notifications**
+📌 **Objectif :** Suivi des dysfonctionnements et alertes des capteurs.  
+
+🛠 **Fonctionnalités :**  
+✅ Liste des alertes avec niveau de criticité (⚠️ Faible, 🛑 Critique)  
+✅ Filtre par type de capteur / matelas  
+✅ Accès rapide au matelas concerné par l’alerte  
+✅ Marquer une alerte comme résolue  
+
+📌 **Maquette :**  
+- **Liste des alertes avec couleurs de priorité** 🔴🟠🟢  
+- **Bouton "Marquer comme résolu"** ✅  
+- **Lien direct vers le matelas concerné** 🔗  
+
+---
+
+### 6️⃣ **⚙️ Page Paramétrage des Capteurs**
+📌 **Objectif :** Configurer individuellement chaque capteur.  
+
+🛠 **Fonctionnalités :**  
+✅ Modification des fréquences d’échantillonnage  
+✅ Définition des seuils d’alerte (ex : min/max pour température, fréquence cardiaque, etc.)  
+✅ Activation/Désactivation des capteurs  
+✅ Mode économie d’énergie  
+
+📌 **Maquette :**  
+- **Liste des capteurs configurables** 🎛️  
+- **Formulaire de paramétrage** 📝  
+- **Bouton "Sauvegarder"** 💾  
+
+---
+
+### 7️⃣ **📜 Page Logs & Historique**
+📌 **Objectif :** Suivi des actions effectuées sur le système.  
+
+🛠 **Fonctionnalités :**  
+✅ Journal des mises à jour de firmware  
+✅ Suivi des redémarrages et calibrations  
+✅ Recherche par date / type d’événement  
+
+📌 **Maquette :**  
+- **Liste des événements** 📜  
+- **Filtres pour rechercher des logs** 🔍  
+
+---
+
+## 🎨 **Maquettes Visuelles Générées**
+Je vais maintenant générer des **maquettes visuelles** pour illustrer ces pages. 🚀  
+(attends un instant pendant que je crée les maquettes…)
+
+Je vais maintenant générer les autres maquettes pour les différentes pages de l'interface.
