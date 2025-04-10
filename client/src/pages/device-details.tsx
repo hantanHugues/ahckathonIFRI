@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { downloadSensorDataCsv } from "@/lib/influxdb-client";
 import { formatDate, formatTime, getSensorStatus } from "@/lib/utils";
 import { useToast } from "@/hooks/use-toast";
+import { queryClient } from "@/lib/queryClient";
 import { 
   ArrowLeft, 
   Loader2, 
@@ -39,6 +40,22 @@ export default function DeviceDetails() {
   const deviceId = params?.id ? parseInt(params.id) : undefined;
   const [timeRange, setTimeRange] = useState("-1h");
   const [activeTab, setActiveTab] = useState("overview");
+  
+  // Rafraîchissement automatique de la page toutes les 10 secondes
+  useEffect(() => {
+    const refreshInterval = setInterval(() => {
+      // Forcer le rafraîchissement des données via React Query
+      queryClient.invalidateQueries({
+        predicate: (query) => {
+          // Invalider toutes les requêtes qui contiennent "sensor-data" ou "latest-data"
+          return query.queryKey[0].toString().includes('sensor-data') || 
+                 query.queryKey[0].toString().includes('latest-data');
+        }
+      });
+    }, 10000); // 10 secondes
+    
+    return () => clearInterval(refreshInterval);
+  }, []);
 
   // Récupérer les informations sur le dispositif
   const { device, alerts, isLoading: isLoadingDevice, updateDevice, updateSensorSetting, resolveAlert } = useDevice(deviceId);

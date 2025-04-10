@@ -64,24 +64,30 @@ export function useSensors(deviceId: string | number) {
     queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, 'temperature', timeRange], 
     queryFn: () => fetch(`/api/devices/${deviceIdStr}/sensor-data?sensorType=temperature&duration=${timeRange}`).then(res => res.json()),
     enabled: !!deviceIdStr,
-    // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
-    refetchInterval: 5000,
+    // Rafraîchir toutes les 10 secondes pour une mise à jour en temps réel
+    refetchInterval: 10000,
+    // Force le rafraîchissement quand les données sont périmées
+    staleTime: 2000,
   });
 
   const { data: pulseData = [] } = useQuery({
     queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, 'pulse', timeRange],
     queryFn: () => fetch(`/api/devices/${deviceIdStr}/sensor-data?sensorType=pulse&duration=${timeRange}`).then(res => res.json()),
     enabled: !!deviceIdStr,
-    // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
-    refetchInterval: 5000,
+    // Rafraîchir toutes les 10 secondes pour une mise à jour en temps réel
+    refetchInterval: 10000,
+    // Force le rafraîchissement quand les données sont périmées
+    staleTime: 2000,
   });
 
   const { data: creatinineData = [] } = useQuery({
     queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, 'creatinine', timeRange],
     queryFn: () => fetch(`/api/devices/${deviceIdStr}/sensor-data?sensorType=creatinine&duration=${timeRange}`).then(res => res.json()),
     enabled: !!deviceIdStr,
-    // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
-    refetchInterval: 5000,
+    // Rafraîchir toutes les 10 secondes pour une mise à jour en temps réel
+    refetchInterval: 10000,
+    // Force le rafraîchissement quand les données sont périmées
+    staleTime: 2000,
   });
 
   useEffect(() => {
@@ -146,6 +152,7 @@ export function useSensors(deviceId: string | number) {
   useEffect(() => {
     const topic = 'patient/esp32-c40a24/data';
 
+    // Seulement surveiller les changements de connexion sans tenter de se connecter à nouveau
     const unsubscribeConnection = mqttClient.onConnectionChange((connected, errorType) => {
       setIsConnected(connected);
       setAuthError(errorType);
@@ -154,27 +161,13 @@ export function useSensors(deviceId: string | number) {
       }
     });
 
-    if (!mqttClient.getConnectionStatus()) {
-      connectToBroker();
-    }
-
-    let unsubscribeMessage = () => {};
-    if (isConnected) {
-      unsubscribeMessage = mqttClient.addMessageHandler(topic, (data) => {
-        setLatestData((prev) => ({ 
-          ...prev, 
-          ...data, 
-          timestamp: new Date().toISOString(),
-          deviceId: deviceIdStr 
-        }));
-      });
-    }
+    // N'essayons pas de nous abonner à nouveau au même topic
+    // car nous l'avons déjà fait dans l'effet précédent
 
     return () => {
       unsubscribeConnection();
-      unsubscribeMessage();
     };
-  }, [isConnected, connectToBroker, deviceIdStr]);
+  }, [isConnected, deviceIdStr]);
 
   const refreshData = useCallback(() => {
     refetch();
