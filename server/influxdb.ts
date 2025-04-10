@@ -12,8 +12,8 @@ let influxDB: InfluxDB;
 let writeApi: any;
 let queryApi: any;
 
-// Mode développement avec stockage en mémoire
-const USE_REAL_INFLUXDB = false;
+// Mode production avec InfluxDB
+const USE_REAL_INFLUXDB = true;
 
 if (USE_REAL_INFLUXDB) {
   // Créer un client InfluxDB réel

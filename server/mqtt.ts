@@ -7,7 +7,7 @@ import { SensorData } from '@shared/schema';
 const SIMULATE_MQTT = false;
 
 // Configurer la connexion MQTT vers HiveMQ
-const brokerUrl = 'mqtt://broker.hivemq.com';
+const brokerUrl = 'mqtt://broker.hivemq.com:1883';
 const defaultTopic = 'patient/esp32-c40a24/data';
 const mqttOptions = {
   clientId: `sensmed_backend_${Math.random().toString(16).substring(2, 10)}`,
