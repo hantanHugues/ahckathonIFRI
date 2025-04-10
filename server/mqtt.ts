@@ -3,9 +3,6 @@ import { storeSensorData } from './influxdb';
 import { storage } from './storage';
 import { SensorData } from '@shared/schema';
 
-// Mode production - connexion réelle au broker
-const SIMULATE_MQTT = false;
-
 // Configurer la connexion MQTT vers HiveMQ
 const brokerUrl = 'mqtt://broker.hivemq.com:1883';
 const defaultTopic = 'patient/esp32-c40a24/data';
@@ -15,9 +12,6 @@ const mqttOptions = {
   connectTimeout: 4000,
   reconnectPeriod: 1000,
 };
-
-// Fonction pour générer des données simulées
-function generateMockSensorData(): SensorData {
   return {
     temperature: 36.5 + (Math.random() * 2 - 1), // Entre 35.5 et 37.5
     pulse: Math.floor(70 + (Math.random() * 30 - 15)), // Entre 55 et 85
