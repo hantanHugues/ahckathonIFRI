@@ -33,7 +33,7 @@ class MQTTClient {
     
     // Utiliser WebSocket pour la connexion dans le navigateur
     // Utiliser WSS (WebSocket sécurisé) pour éviter les problèmes de pare-feu
-    const websocketUrl = brokerUrl;
+    const websocketUrl = 'wss://broker.hivemq.com:8884';
     
     // Options par défaut
     const defaultOptions = {
