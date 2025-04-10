@@ -28,12 +28,12 @@ class MQTTClient {
     // Ce constructeur peut être vide car nous initialisons la connexion manuellement
   }
 
-  connect(brokerUrl = 'wss://broker.hivemq.com:8884', options: MqttOptions = {}) {
+  connect(brokerUrl = 'mqtt://broker.hivemq.com:1883', options: MqttOptions = {}) {
     console.log('Tentative de connexion au broker MQTT via WebSocket');
     
     // Utiliser WebSocket pour la connexion dans le navigateur
-    // Utiliser WSS (WebSocket sécurisé) pour éviter les problèmes de pare-feu
-    const websocketUrl = 'wss://broker.hivemq.com:8884';
+    // Dans le navigateur, nous devons utiliser l'URL du broker comme fournie
+    const websocketUrl = brokerUrl;
     
     // Options par défaut
     const defaultOptions = {
@@ -58,7 +58,7 @@ class MQTTClient {
         ...options
       };
 
-      console.log('Connexion au broker MQTT avec options:', websocketUrl);
+      console.log('Connexion au broker MQTT avec options:', websocketUrl, fullOptions);
       
       // Utiliser mqtt.connect pour créer un client MQTT
       this.client = mqtt.connect(websocketUrl, fullOptions);

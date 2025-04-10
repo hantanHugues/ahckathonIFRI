@@ -52,19 +52,22 @@ export function useSensors(deviceId: string | number) {
   const { data: temperatureData = [] } = useQuery({
     queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, { sensorType: 'temperature', duration: '-1h' }],
     enabled: !!deviceIdStr,
-    refetchInterval: 60000,
+    // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
+    refetchInterval: 5000,
   });
 
   const { data: pulseData = [] } = useQuery({
     queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, { sensorType: 'pulse', duration: '-1h' }],
     enabled: !!deviceIdStr,
-    refetchInterval: 60000,
+    // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
+    refetchInterval: 5000,
   });
 
   const { data: creatinineData = [] } = useQuery({
     queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, { sensorType: 'creatinine', duration: '-1h' }],
     enabled: !!deviceIdStr,
-    refetchInterval: 60000,
+    // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
+    refetchInterval: 5000,
   });
 
   useEffect(() => {
@@ -77,11 +80,13 @@ export function useSensors(deviceId: string | number) {
   const [showAuthDialog, setShowAuthDialog] = useState(false);
 
   useEffect(() => {
-    if (!device?.mqttTopic) return;
+    // Utiliser un topic par défaut si le device n'a pas de topic MQTT
+    const topic = 'patient/esp32-c40a24/data';
 
-    mqttClient.connect('mqtt://broker.hivemq.com');
+    // Utiliser websocket pour la connexion MQTT dans le navigateur
+    mqttClient.connect('ws://broker.hivemq.com:8000/mqtt');
 
-    const unsubscribe = mqttClient.addMessageHandler('patient/esp32-c40a24/data', (data) => {
+    const unsubscribe = mqttClient.addMessageHandler(topic, (data) => {
       setLatestData({
         ...data,
         timestamp: new Date().toISOString(),
@@ -90,18 +95,17 @@ export function useSensors(deviceId: string | number) {
     });
 
     return () => unsubscribe();
-  }, [device?.mqttTopic, deviceIdStr]);
+  }, [deviceIdStr]);
 
   const connectToBroker = useCallback((credentials?: { username: string, password: string }) => {
-    if (!device?.mqttTopic) return;
     const options = credentials ? { ...credentials } : {};
     if (!mqttClient.getConnectionStatus()) {
-      mqttClient.connect('mqtt://broker.hivemq.com', options);
+      mqttClient.connect('ws://broker.hivemq.com:8000/mqtt', options);
     }
-  }, [device?.mqttTopic]);
+  }, []);
 
   useEffect(() => {
-    if (!device?.mqttTopic) return;
+    const topic = 'patient/esp32-c40a24/data';
 
     const unsubscribeConnection = mqttClient.onConnectionChange((connected, errorType) => {
       setIsConnected(connected);
@@ -116,9 +120,14 @@ export function useSensors(deviceId: string | number) {
     }
 
     let unsubscribeMessage = () => {};
-    if (isConnected && device.mqttTopic) {
-      unsubscribeMessage = mqttClient.addMessageHandler(device.mqttTopic, (data) => {
-        setLatestData((prev) => ({ ...prev, ...data, timestamp: new Date().toISOString() }));
+    if (isConnected) {
+      unsubscribeMessage = mqttClient.addMessageHandler(topic, (data) => {
+        setLatestData((prev) => ({ 
+          ...prev, 
+          ...data, 
+          timestamp: new Date().toISOString(),
+          deviceId: deviceIdStr 
+        }));
       });
     }
 
@@ -126,7 +135,7 @@ export function useSensors(deviceId: string | number) {
       unsubscribeConnection();
       unsubscribeMessage();
     };
-  }, [device?.mqttTopic, isConnected, connectToBroker]);
+  }, [isConnected, connectToBroker, deviceIdStr]);
 
   const refreshData = useCallback(() => {
     refetch();
