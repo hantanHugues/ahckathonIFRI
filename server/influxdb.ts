@@ -12,8 +12,8 @@ let influxDB: InfluxDB;
 let writeApi: any;
 let queryApi: any;
 
-// Utiliser le mode simulation temporairement
-const USE_REAL_INFLUXDB = false;
+// Utiliser le mode simulation pour le développement
+const USE_REAL_INFLUXDB = true;
 
 if (USE_REAL_INFLUXDB) {
   // Créer un client InfluxDB réel

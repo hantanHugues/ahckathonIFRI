@@ -101,9 +101,6 @@ export function useSensors(deviceId: string | number) {
     });
     
     return () => unsubscribe();
-        temperature,
-        pulse,
-        creatinine,
         timestamp: new Date().toISOString()
       }));
       
