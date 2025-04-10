@@ -4,9 +4,9 @@ import { TimeSeriesPoint, SensorData } from '@shared/schema';
 
 // Configuration InfluxDB
 const url = 'http://0.0.0.0:8086';
-const token = process.env.INFLUXDB_TOKEN || 'your-token';
-const org = process.env.INFLUXDB_ORG || 'sensmed';
-const bucket = process.env.INFLUXDB_BUCKET || 'patient_data';
+const token = 'votre-token-influxdb'; // Remplacez par votre token
+const org = 'votre-organisation'; // Remplacez par votre organisation
+const bucket = 'patient_data';
 
 let influxDB: InfluxDB;
 let writeApi: any;
