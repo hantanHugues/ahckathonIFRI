@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { SensorData, SensorSetting } from '@shared/schema';
 import { apiGet } from '@/lib/queryClient';
 import { mqttClient } from '@/lib/mqtt-client';
@@ -39,6 +39,9 @@ export function useSensors(deviceId: string | number) {
     enabled: !!deviceId,
   });
 
+  // Obtenir le client de requête pour l'invalidation
+  const queryClient = useQueryClient();
+
   const { 
     data: initialData, 
     isLoading,
@@ -59,7 +62,7 @@ export function useSensors(deviceId: string | number) {
 
   const { data: temperatureData = [] } = useQuery({
     queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, 'temperature', timeRange], 
-    queryFn: () => apiGet(`/api/devices/${deviceIdStr}/sensor-data?sensorType=temperature&duration=${timeRange}`),
+    queryFn: () => fetch(`/api/devices/${deviceIdStr}/sensor-data?sensorType=temperature&duration=${timeRange}`).then(res => res.json()),
     enabled: !!deviceIdStr,
     // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
     refetchInterval: 5000,
@@ -67,7 +70,7 @@ export function useSensors(deviceId: string | number) {
 
   const { data: pulseData = [] } = useQuery({
     queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, 'pulse', timeRange],
-    queryFn: () => apiGet(`/api/devices/${deviceIdStr}/sensor-data?sensorType=pulse&duration=${timeRange}`),
+    queryFn: () => fetch(`/api/devices/${deviceIdStr}/sensor-data?sensorType=pulse&duration=${timeRange}`).then(res => res.json()),
     enabled: !!deviceIdStr,
     // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
     refetchInterval: 5000,
@@ -75,7 +78,7 @@ export function useSensors(deviceId: string | number) {
 
   const { data: creatinineData = [] } = useQuery({
     queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, 'creatinine', timeRange],
-    queryFn: () => apiGet(`/api/devices/${deviceIdStr}/sensor-data?sensorType=creatinine&duration=${timeRange}`),
+    queryFn: () => fetch(`/api/devices/${deviceIdStr}/sensor-data?sensorType=creatinine&duration=${timeRange}`).then(res => res.json()),
     enabled: !!deviceIdStr,
     // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
     refetchInterval: 5000,
@@ -98,15 +101,40 @@ export function useSensors(deviceId: string | number) {
     mqttClient.connect('ws://broker.hivemq.com:8000/mqtt');
 
     const unsubscribe = mqttClient.addMessageHandler(topic, (data) => {
+      // Mettre à jour les données du capteur
       setLatestData({
         ...data,
         timestamp: new Date().toISOString(),
         deviceId: deviceIdStr
       });
+      
+      // Invalider les requêtes pour forcer un rechargement
+      queryClient.invalidateQueries({
+        queryKey: [`/api/devices/${deviceIdStr}/latest-data`]
+      });
+      
+      // Invalider les données de capteurs spécifiques si présentes
+      if (data.temperature !== undefined) {
+        queryClient.invalidateQueries({
+          queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, 'temperature']
+        });
+      }
+      
+      if (data.pulse !== undefined) {
+        queryClient.invalidateQueries({
+          queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, 'pulse']
+        });
+      }
+      
+      if (data.creatinine !== undefined) {
+        queryClient.invalidateQueries({
+          queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, 'creatinine']
+        });
+      }
     });
 
     return () => unsubscribe();
-  }, [deviceIdStr]);
+  }, [deviceIdStr, queryClient]);
 
   const connectToBroker = useCallback((credentials?: { username: string, password: string }) => {
     const options = credentials ? { ...credentials } : {};
