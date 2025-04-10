@@ -12,6 +12,8 @@ let influxDB: InfluxDB;
 let writeApi: any;
 let queryApi: any;
 
+const USE_REAL_INFLUXDB = true;
+
 if (USE_REAL_INFLUXDB) {
   // Créer un client InfluxDB réel
   influxDB = new InfluxDB({ url, token });
