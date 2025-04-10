@@ -2,18 +2,18 @@ import { InfluxDB, Point } from '@influxdata/influxdb-client';
 import { BucketsAPI } from '@influxdata/influxdb-client-apis';
 import { TimeSeriesPoint, SensorData } from '@shared/schema';
 
-// Récupérer les variables d'environnement
-const url = process.env.INFLUXDB_URL || 'https://eu-central-1-1.aws.cloud2.influxdata.com';
-const token = process.env.INFLUXDB_TOKEN || 'your-token-here'; // Ceci nécessitera un vrai token pour la production
-const org = process.env.INFLUXDB_ORG || 'sensmed';
-const bucket = process.env.INFLUXDB_BUCKET || 'patient_data';
+// Configuration InfluxDB
+const url = 'http://localhost:8086';
+const token = 'my-super-secret-auth-token';
+const org = 'sensmed';
+const bucket = 'patient_data';
 
 let influxDB: InfluxDB;
 let writeApi: any;
 let queryApi: any;
 
-// Mode développement temporaire en attendant l'authentification InfluxDB
-const USE_REAL_INFLUXDB = false;
+// Activer InfluxDB
+const USE_REAL_INFLUXDB = true;
 
 if (USE_REAL_INFLUXDB) {
   // Créer un client InfluxDB réel
