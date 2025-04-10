@@ -49,22 +49,33 @@ export function useSensors(deviceId: string | number) {
     enabled: !!deviceIdStr,
   });
 
+  // Utiliser un état pour stocker la plage de temps actuelle
+  const [timeRange, setTimeRange] = useState('-1h');
+  
+  // Pour les requêtes de données historiques, nous devons passer explicitement les paramètres
+  const temperatureParams = { sensorType: 'temperature', duration: timeRange };
+  const pulseParams = { sensorType: 'pulse', duration: timeRange };
+  const creatinineParams = { sensorType: 'creatinine', duration: timeRange };
+
   const { data: temperatureData = [] } = useQuery({
-    queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, { sensorType: 'temperature', duration: '-1h' }],
+    queryKey: [`/api/devices/${deviceIdStr}/sensor-data`], 
+    queryFn: () => apiRequest(`/api/devices/${deviceIdStr}/sensor-data?sensorType=temperature&duration=${timeRange}`),
     enabled: !!deviceIdStr,
     // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
     refetchInterval: 5000,
   });
 
   const { data: pulseData = [] } = useQuery({
-    queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, { sensorType: 'pulse', duration: '-1h' }],
+    queryKey: [`/api/devices/${deviceIdStr}/sensor-data`],
+    queryFn: () => apiRequest(`/api/devices/${deviceIdStr}/sensor-data?sensorType=pulse&duration=${timeRange}`),
     enabled: !!deviceIdStr,
     // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
     refetchInterval: 5000,
   });
 
   const { data: creatinineData = [] } = useQuery({
-    queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, { sensorType: 'creatinine', duration: '-1h' }],
+    queryKey: [`/api/devices/${deviceIdStr}/sensor-data`],
+    queryFn: () => apiRequest(`/api/devices/${deviceIdStr}/sensor-data?sensorType=creatinine&duration=${timeRange}`),
     enabled: !!deviceIdStr,
     // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
     refetchInterval: 5000,

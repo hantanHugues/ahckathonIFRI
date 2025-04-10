@@ -29,12 +29,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
   
   app.get("/api/devices/:id", ensureAuthenticated, async (req, res) => {
     try {
-      const device = await storage.getDevice(parseInt(req.params.id));
+      // Tentative de conversion en nombre pour les IDs numériques
+      const idParam = req.params.id;
+      let device;
+      
+      // Vérifier si l'ID est un nombre ou une chaîne (deviceId)
+      if (!isNaN(parseInt(idParam))) {
+        // ID numérique
+        device = await storage.getDevice(parseInt(idParam));
+      } else {
+        // ID de chaîne (deviceId)
+        device = await storage.getDeviceByDeviceId(idParam);
+      }
+      
       if (!device) {
         return res.status(404).json({ message: "Dispositif non trouvé" });
       }
+      
       res.json(device);
     } catch (error) {
+      console.error("Erreur lors de la récupération du dispositif:", error);
       res.status(500).json({ message: "Erreur lors de la récupération du dispositif" });
     }
   });
@@ -112,10 +126,27 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Routes pour les paramètres des capteurs
   app.get("/api/devices/:deviceId/sensor-settings", ensureAuthenticated, async (req, res) => {
     try {
-      const deviceId = parseInt(req.params.deviceId);
+      const idParam = req.params.deviceId;
+      let deviceId: number;
+      let device;
+      
+      // Vérifier si l'ID est un nombre ou une chaîne (deviceId)
+      if (!isNaN(parseInt(idParam))) {
+        // ID numérique
+        deviceId = parseInt(idParam);
+      } else {
+        // ID de chaîne (deviceId)
+        device = await storage.getDeviceByDeviceId(idParam);
+        if (!device) {
+          return res.status(404).json({ message: "Dispositif non trouvé" });
+        }
+        deviceId = device.id;
+      }
+      
       const sensorSettings = await storage.getSensorSettings(deviceId);
       res.json(sensorSettings);
     } catch (error) {
+      console.error("Erreur lors de la récupération des paramètres des capteurs:", error);
       res.status(500).json({ message: "Erreur lors de la récupération des paramètres des capteurs" });
     }
   });
