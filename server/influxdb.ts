@@ -12,14 +12,11 @@ let influxDB: InfluxDB;
 let writeApi: any;
 let queryApi: any;
 
-// Utiliser InfluxDB en production
-const USE_REAL_INFLUXDB = true;
+// Mode développement avec stockage en mémoire
+const USE_REAL_INFLUXDB = false;
 
 if (USE_REAL_INFLUXDB) {
   // Créer un client InfluxDB réel
-  influxDB = new InfluxDB({ url, token });
-  writeApi = influxDB.getWriteApi(org, bucket, 'ns');
-  queryApi = influxDB.getQueryApi(org);
   influxDB = new InfluxDB({ url, token });
   writeApi = influxDB.getWriteApi(org, bucket, 'ns');
   queryApi = influxDB.getQueryApi(org);
