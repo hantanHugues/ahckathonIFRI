@@ -9,7 +9,6 @@ const SIMULATE_MQTT = false;
 // Configurer la connexion MQTT vers HiveMQ
 const brokerUrl = 'mqtt://broker.hivemq.com';
 const defaultTopic = 'patient/esp32-c40a24/data';
-const defaultTopic = 'patient/esp32-c40a24/data';
 const mqttOptions = {
   clientId: `sensmed_backend_${Math.random().toString(16).substring(2, 10)}`,
   clean: true,
