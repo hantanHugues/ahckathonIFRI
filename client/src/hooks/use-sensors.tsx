@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { SensorData, SensorSetting } from '@shared/schema';
-import { apiRequest } from '@/lib/queryClient';
+import { apiGet } from '@/lib/queryClient';
 import { mqttClient } from '@/lib/mqtt-client';
 import { getSensorData } from '@/lib/influxdb-client';
 import { useToast } from '@/hooks/use-toast';
@@ -58,24 +58,24 @@ export function useSensors(deviceId: string | number) {
   const creatinineParams = { sensorType: 'creatinine', duration: timeRange };
 
   const { data: temperatureData = [] } = useQuery({
-    queryKey: [`/api/devices/${deviceIdStr}/sensor-data`], 
-    queryFn: () => apiRequest(`/api/devices/${deviceIdStr}/sensor-data?sensorType=temperature&duration=${timeRange}`),
+    queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, 'temperature', timeRange], 
+    queryFn: () => apiGet(`/api/devices/${deviceIdStr}/sensor-data?sensorType=temperature&duration=${timeRange}`),
     enabled: !!deviceIdStr,
     // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
     refetchInterval: 5000,
   });
 
   const { data: pulseData = [] } = useQuery({
-    queryKey: [`/api/devices/${deviceIdStr}/sensor-data`],
-    queryFn: () => apiRequest(`/api/devices/${deviceIdStr}/sensor-data?sensorType=pulse&duration=${timeRange}`),
+    queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, 'pulse', timeRange],
+    queryFn: () => apiGet(`/api/devices/${deviceIdStr}/sensor-data?sensorType=pulse&duration=${timeRange}`),
     enabled: !!deviceIdStr,
     // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
     refetchInterval: 5000,
   });
 
   const { data: creatinineData = [] } = useQuery({
-    queryKey: [`/api/devices/${deviceIdStr}/sensor-data`],
-    queryFn: () => apiRequest(`/api/devices/${deviceIdStr}/sensor-data?sensorType=creatinine&duration=${timeRange}`),
+    queryKey: [`/api/devices/${deviceIdStr}/sensor-data`, 'creatinine', timeRange],
+    queryFn: () => apiGet(`/api/devices/${deviceIdStr}/sensor-data?sensorType=creatinine&duration=${timeRange}`),
     enabled: !!deviceIdStr,
     // Rafraîchir toutes les 5 secondes pour une mise à jour en temps réel
     refetchInterval: 5000,

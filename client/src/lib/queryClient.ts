@@ -7,20 +7,83 @@ async function throwIfResNotOk(res: Response) {
   }
 }
 
-export async function apiRequest(
-  method: string,
-  url: string,
-  data?: unknown | undefined,
-): Promise<Response> {
+// Fonction pour effectuer une requête HTTP GET
+export async function apiGet<T = any>(url: string): Promise<T> {
   const res = await fetch(url, {
-    method,
-    headers: data ? { "Content-Type": "application/json" } : {},
-    body: data ? JSON.stringify(data) : undefined,
+    method: 'GET',
     credentials: "include",
   });
 
   await throwIfResNotOk(res);
-  return res;
+  return res.json();
+}
+
+// Fonction pour effectuer une requête HTTP POST
+export async function apiPost<T = any>(url: string, data: unknown): Promise<T> {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+    credentials: "include",
+  });
+
+  await throwIfResNotOk(res);
+  return res.json();
+}
+
+// Fonction pour effectuer une requête HTTP PUT
+export async function apiPut<T = any>(url: string, data: unknown): Promise<T> {
+  const res = await fetch(url, {
+    method: 'PUT',
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+    credentials: "include",
+  });
+
+  await throwIfResNotOk(res);
+  return res.json();
+}
+
+// Fonction pour effectuer une requête HTTP DELETE
+export async function apiDelete<T = any>(url: string): Promise<T> {
+  const res = await fetch(url, {
+    method: 'DELETE',
+    credentials: "include",
+  });
+
+  await throwIfResNotOk(res);
+  return res.json();
+}
+
+// Fonction générique pour compatibilité rétroactive
+export async function apiRequest<T = any>(
+  urlOrMethod: string,
+  urlOrData?: string | unknown,
+  data?: unknown
+): Promise<T> {
+  // Si le premier argument est une méthode HTTP et le second une URL
+  if (urlOrMethod === 'GET' && typeof urlOrData === 'string') {
+    return apiGet<T>(urlOrData as string);
+  } 
+  else if (urlOrMethod === 'POST' && typeof urlOrData === 'string') {
+    return apiPost<T>(urlOrData as string, data || {});
+  }
+  else if (urlOrMethod === 'PUT' && typeof urlOrData === 'string') {
+    return apiPut<T>(urlOrData as string, data || {});
+  }
+  else if (urlOrMethod === 'DELETE' && typeof urlOrData === 'string') {
+    return apiDelete<T>(urlOrData as string);
+  }
+  // Si le premier argument est une URL (requête GET)
+  else if (typeof urlOrMethod === 'string' && !urlOrData) {
+    return apiGet<T>(urlOrMethod);
+  }
+  // Si le premier argument est une URL et le second sont des données (requête POST)
+  else if (typeof urlOrMethod === 'string' && urlOrData) {
+    return apiPost<T>(urlOrMethod, urlOrData);
+  }
+  
+  throw new Error('Invalid arguments to apiRequest');
 }
 
 type UnauthorizedBehavior = "returnNull" | "throw";
