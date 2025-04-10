@@ -100,9 +100,15 @@ export function useSensors(deviceId: string | number) {
       });
     });
     
-    return () => unsubscribe();
-        timestamp: new Date().toISOString()
-      }));
+    });
+    
+    setLatestData(prev => ({
+      ...prev,
+      temperature,
+      pulse,
+      creatinine,
+      timestamp: new Date().toISOString()
+    }));
       
       console.log('Simulation: Nouvelles données de capteurs générées', { temperature, pulse, creatinine });
     }, 5000); // Mise à jour toutes les 5 secondes
