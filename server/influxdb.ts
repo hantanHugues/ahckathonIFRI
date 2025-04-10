@@ -12,11 +12,14 @@ let influxDB: InfluxDB;
 let writeApi: any;
 let queryApi: any;
 
-// Variable pour déterminer si nous utilisons l'API InfluxDB réelle ou une simulation
-const USE_REAL_INFLUXDB = false; // À changer en production
+// Utiliser l'API InfluxDB réelle
+const USE_REAL_INFLUXDB = true;
 
 if (USE_REAL_INFLUXDB) {
   // Créer un client InfluxDB réel
+  influxDB = new InfluxDB({ url, token });
+  writeApi = influxDB.getWriteApi(org, bucket, 'ns');
+  queryApi = influxDB.getQueryApi(org);
   influxDB = new InfluxDB({ url, token });
   writeApi = influxDB.getWriteApi(org, bucket, 'ns');
   queryApi = influxDB.getQueryApi(org);

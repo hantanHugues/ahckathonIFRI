@@ -3,11 +3,12 @@ import { storeSensorData } from './influxdb';
 import { storage } from './storage';
 import { SensorData } from '@shared/schema';
 
-// Mode simulation pour le développement (désactiver pour la production)
-const SIMULATE_MQTT = true;
+// Mode production - pas de simulation
+const SIMULATE_MQTT = false;
 
-// Configurer la connexion MQTT
-const brokerUrl = process.env.MQTT_BROKER || 'mqtt://broker.hivemq.com';
+// Configurer la connexion MQTT vers HiveMQ
+const brokerUrl = 'mqtt://broker.hivemq.com';
+const defaultTopic = 'patient/esp32-c40a24/data';
 const defaultTopic = 'patient/esp32-c40a24/data';
 const mqttOptions = {
   clientId: `sensmed_backend_${Math.random().toString(16).substring(2, 10)}`,

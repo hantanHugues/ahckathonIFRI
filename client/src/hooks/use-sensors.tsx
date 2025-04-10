@@ -84,25 +84,21 @@ export function useSensors(deviceId: string | number) {
   const [authError, setAuthError] = useState<string | undefined>(undefined);
   const [showAuthDialog, setShowAuthDialog] = useState(false);
   
-  // Simulation de données de capteurs pour le développement
+  // Écouter les données réelles MQTT
   useEffect(() => {
-    if (!latestData) {
-      // Données initiales fictives
+    if (!device?.mqttTopic) return;
+    
+    // Se connecter au broker MQTT
+    mqttClient.connect('mqtt://broker.hivemq.com');
+    
+    // S'abonner au topic du dispositif
+    const unsubscribe = mqttClient.addMessageHandler('patient/esp32-c40a24/data', (data) => {
       setLatestData({
-        temperature: 36.8,
-        pulse: 72,
-        creatinine: 0.9,
+        ...data,
         timestamp: new Date().toISOString(),
         deviceId: deviceIdStr
       });
-    }
-    
-    // Simuler des mises à jour périodiques des données
-    const interval = setInterval(() => {
-      // Générer de légères variations pour simuler les changements de capteurs
-      const temperature = parseFloat((36 + Math.random() * 2).toFixed(1));
-      const pulse = Math.floor(60 + Math.random() * 40);
-      const creatinine = parseFloat((0.7 + Math.random() * 0.6).toFixed(1));
+    });
       
       setLatestData(prev => ({
         ...prev,
