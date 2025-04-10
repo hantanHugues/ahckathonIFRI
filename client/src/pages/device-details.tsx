@@ -58,6 +58,9 @@ export default function DeviceDetails() {
     connectWithCredentials
   } = useSensors(deviceId || 0);
   
+  // État de mise à jour pour forcer l'actualisation du graphique
+  const [chartUpdateTrigger, setChartUpdateTrigger] = useState<number>(Date.now());
+  
   const { toast } = useToast();
 
   // Rafraîchissement automatique forcé de la page toutes les 10 secondes
@@ -71,6 +74,9 @@ export default function DeviceDetails() {
       if (refreshData) {
         refreshData();
       }
+      
+      // 3. Forcer le rafraîchissement du graphique
+      setChartUpdateTrigger(Date.now());
       
       // Notification optionnelle en bas à droite
       toast({

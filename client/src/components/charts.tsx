@@ -31,13 +31,27 @@ export function SensorChart({
 }: SensorChartProps) {
   const [timeRange, setTimeRange] = useState<string>("1h");
   const [chartData, setChartData] = useState<any[]>([]);
+  const [lastUpdateTime, setLastUpdateTime] = useState<number>(Date.now());
 
+  // Forcer la mise à jour du graphique périodiquement
+  useEffect(() => {
+    // On force le rafraîchissement toutes les 10 secondes
+    const refreshInterval = setInterval(() => {
+      setLastUpdateTime(Date.now());
+    }, 10000);
+    
+    return () => clearInterval(refreshInterval);
+  }, []);
+  
   // Préparer les données pour le graphique
   useEffect(() => {
     if (!temperatureData.length && !pulseData.length && !creatinineData.length) {
       setChartData([]);
       return;
     }
+    
+    // Forcer la mise à jour à chaque changement de lastUpdateTime
+    console.log('Mise à jour du graphique:', new Date().toLocaleTimeString());
 
     // Créer un dictionnaire pour regrouper les données par horodatage
     const dataByTime: { [key: string]: any } = {};
@@ -98,7 +112,7 @@ export function SensorChart({
     });
     
     setChartData(chartDataArray);
-  }, [temperatureData, pulseData, creatinineData]);
+  }, [temperatureData, pulseData, creatinineData, lastUpdateTime]);
 
   // Gérer le changement de plage de temps
   const handleTimeRangeChange = (range: string) => {
