@@ -3,16 +3,16 @@ import { BucketsAPI } from '@influxdata/influxdb-client-apis';
 import { TimeSeriesPoint, SensorData } from '@shared/schema';
 
 // Configuration InfluxDB
-const url = 'http://0.0.0.0:8086';
-const token = 'votre-token-influxdb'; // Remplacez par votre token
-const org = 'votre-organisation'; // Remplacez par votre organisation
-const bucket = 'patient_data';
+const url = 'http://127.0.0.1:5000';
+const token = ' HfFC0e_yzfgNxSR9QJUcBqwC3LnMyLn5-YyCdCr_Jq-M_kj4NyOE7wP8y_lQi4MPzWmN4_o3MOkaMz5ayFYq6A=='; // Remplacez par votre token
+const org = 'IFRI'; // Remplacez par votre organisation
+const bucket = 'Hackathon';
 
 let influxDB: InfluxDB;
 let writeApi: any;
 let queryApi: any;
 
-const USE_REAL_INFLUXDB = true;
+const USE_REAL_INFLUXDB = false; // Désactivé pour le développement
 
 if (USE_REAL_INFLUXDB) {
   // Créer un client InfluxDB réel
