@@ -3,10 +3,26 @@ import { BucketsAPI } from '@influxdata/influxdb-client-apis';
 import { TimeSeriesPoint, SensorData } from '@shared/schema';
 
 // Configuration InfluxDB
-const url = process.env.INFLUXDB_CLOUD_URL || 'http://127.0.0.1:8086';
+// Extraire juste le domaine de base de l'URL InfluxDB Cloud
+let url = process.env.INFLUXDB_CLOUD_URL || 'http://127.0.0.1:8086';
+// Si l'URL contient '/orgs/', supprimer cette partie et tout ce qui suit
+if (url && url.includes('/orgs/')) {
+  url = url.split('/orgs/')[0];
+}
 const token = process.env.INFLUXDB_TOKEN || ' HfFC0e_yzfgNxSR9QJUcBqwC3LnMyLn5-YyCdCr_Jq-M_kj4NyOE7wP8y_lQi4MPzWmN4_o3MOkaMz5ayFYq6A==';
-const org = 'IFRI'; // Remplacez par votre organisation
+// Extraire l'identifiant d'organisation de l'URL si disponible
+let org = 'IFRI';
+if (process.env.INFLUXDB_CLOUD_URL && process.env.INFLUXDB_CLOUD_URL.includes('/orgs/')) {
+  const match = process.env.INFLUXDB_CLOUD_URL.match(/\/orgs\/([^\/]+)/);
+  if (match && match[1]) {
+    org = match[1];
+  }
+}
 const bucket = 'Hackathon';
+
+console.log('Connexion à InfluxDB avec URL:', url);
+console.log('Organisation InfluxDB:', org);
+console.log('Bucket InfluxDB:', bucket);
 
 let influxDB: InfluxDB;
 let writeApi: any;
